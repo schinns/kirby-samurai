@@ -1,0 +1,6 @@
+(install
+    (section bin)
+    (package App)
+    (files Roboto-Regular.ttf))
+    
+

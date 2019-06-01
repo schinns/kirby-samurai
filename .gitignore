@@ -1,0 +1,14 @@
+.DS_Store
+node_modules
+
+# esy
+_build/
+_esy/
+
+# reason
+*.install
+.merlin
+
+#editor
+*.swp
+*.swo

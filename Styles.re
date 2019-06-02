@@ -16,10 +16,10 @@ let appStyle =
 let gameStyle = 
   Style.[
     backgroundColor(Colors.white),
-    justifyContent(`Center),
+    justifyContent(`FlexStart),
     alignItems(`Center),
-    width(400),
-    height(400),
+    width(600),
+    height(450),
   ];
 
 let textStyle = 
@@ -27,5 +27,6 @@ let textStyle =
     color(Colors.black),
     fontFamily("Roboto-Regular.ttf"),
     fontSize(20),
+    marginTop(10),
   ];
 

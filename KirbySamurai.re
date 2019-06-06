@@ -1,6 +1,7 @@
 open Revery;
 open Revery_Core;
 open Revery.UI;
+open Revery_UI_Components;
 open Styles;
 
 type t = 
@@ -9,26 +10,31 @@ type t =
   | Kirby
   | MetaKnight;
 
-type gameState = 
+type gameStateT = 
   | Stop
-  | PreStart
-  | Start;
+  | PreRunning
+  | Running;
 
 type state = {
   winner: t,
   timer: int,
-  time: float,
   keyEvents: list(string),
+  gameState: gameStateT,
+  seconds: int,
 };
 
 type action =
   | SetKeyEvents(list(string))
+  | SetGameState(gameStateT)
+  | CountDown
   | DetermineWinner(t);
 
 let reducer = (action, state) =>
   switch(action) {
-  | SetKeyEvents(events) => {...state, keyEvents: events }
-  | DetermineWinner(player) => {...state, winner: player }
+  | SetKeyEvents(events) => { ...state, keyEvents: events }
+  | DetermineWinner(player) => { ...state, winner: player }
+  | SetGameState(newState) => { ...state, gameState: newState }
+  | CountDown => {...state, seconds: state.seconds + 1}
   };
 
 let component = React.component("KirbySamurai");
@@ -40,8 +46,9 @@ let createElement = (~children as _, ()) =>
         ~initialState={
           winner: NA,
           timer: 3,
-          time: 0.,
-          keyEvents: []
+          keyEvents: [],
+          gameState: Stop,
+          seconds: 0,
         },
         reducer,
         hooks
@@ -54,27 +61,61 @@ let createElement = (~children as _, ()) =>
        onKeyDown=((event: NodeEvents.keyEventParams) => {
          //key event
          let key = event.key |> Key.toString;
-         // new key event state
-         let newKeyEvents = List.append(state.keyEvents, [key]);
-         //dispatch only up to 2 events
-         if(state.keyEvents |> List.length < 2) {
-           dispatch(SetKeyEvents(newKeyEvents))
+         //press spacebar to start game
+         if(key == " ") {
+           dispatch(SetGameState(PreRunning)) 
          }
        })
      >
        <Text style=textStyle text="Kirby Samurai" />
-       <Text 
-         style=textStyle 
-         text=(
-           if(state.keyEvents |> List.length > 0) {
-             List.nth(state.keyEvents, 0) == "a" ?
-               "Kirby Wins!"
-               : "Meta Knight Wins!"
-           } else {
-             "Go!"
-           }
+       (
+         switch(state.gameState) {
+         | Stop => (
+           <Clickable onClick=(() => dispatch(SetGameState(PreRunning)))>
+             <Text style=textStyle text="Play!" />
+           </Clickable>
          )
-       />
+         | PreRunning => {
+           
+           <View>
+             <Text style=textStyle text="..." />
+           </View>
+         }
+         | Running => (
+           <View 
+             ref={r => Focus.focus(r)}
+             onKeyDown=((event: NodeEvents.keyEventParams) => {
+               //key event
+               let key = event.key |> Key.toString;
+               // new key event state
+               let newKeyEvents = List.append(state.keyEvents, [key]);
+               //dispatch only up to 2 events
+               if(state.keyEvents |> List.length < 2) {
+                 dispatch(SetKeyEvents(newKeyEvents))
+               }
+               if(key == " ") {
+                 dispatch(SetKeyEvents([]))
+               }
+             })
+           >
+             <Text 
+               style=textStyle 
+               text=(
+                 if(state.keyEvents |> List.length > 0) {
+                   switch(List.nth(state.keyEvents, 0)) {
+                   | "a" => "Kirby Wins!"
+                   | "'" => "Meta Knight Wins!"
+                   | _   => "Go!"
+                   }
+                 } else {
+                   "Go!"
+                 }
+               )
+             />
+           </View>
+         )
+         }
+    )
      </View>
     )
   });

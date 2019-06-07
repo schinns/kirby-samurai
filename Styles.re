@@ -27,4 +27,9 @@ let textStyle =
     fontFamily("Roboto-Regular.ttf"),
     fontSize(20),
   ];
-
+/*
+let kirby1 = 
+  Style.[
+    position(`Absolute),
+  ];
+  */

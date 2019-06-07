@@ -54,7 +54,6 @@ let createElement = (~children as _, ()) =>
       | Stop => (
         <KeyboardInput
             onKeyDown=((event: NodeEvents.keyEventParams) => {
-             print_endline ("KEY PRESS! ");
               //key event
               let key = event.key |> Key.toString;
               //press spacebar to start game
@@ -69,7 +68,6 @@ let createElement = (~children as _, ()) =>
         </KeyboardInput>
       )
       | PreRunning => {
-print_endline ("Pre-running");
         let tickFn = t => dispatch(Count(t |> Time.toSeconds));
         let interval = 
         Revery_Core.Tick.interval(tickFn, Time.Seconds(1.)); 

@@ -78,7 +78,7 @@ let createElement = (~children as _, ()) =>
           //set game state Running
           dispatch(SetGameState(Running));
         };
-        <View style=gameStyle1>
+        <View style=gameStyle>
           <Image
             src="frame1.png"
             width=600
@@ -88,7 +88,7 @@ let createElement = (~children as _, ()) =>
       }
       | Running => (
         <View 
-          style=gameStyle2
+          style=gameStyle
           ref={r => Focus.focus(r)}
           onKeyDown=((event: NodeEvents.keyEventParams) => {
             //key event

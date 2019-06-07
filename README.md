@@ -12,7 +12,7 @@ Install all the depedencies using
 esy install
 ```
 
-Build and run the application a first time:
+Build and run the application:
 
 ```
 esy run

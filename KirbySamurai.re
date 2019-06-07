@@ -1,7 +1,7 @@
 open Revery;
 open Revery_Core;
 open Revery.UI;
-open Revery_UI_Components;
+open Revery.UI.Components;
 open Styles;
 
 type gameStateT = 
@@ -52,23 +52,24 @@ let createElement = (~children as _, ()) =>
     (hooks,
       switch(state.gameState) {
       | Stop => (
-        <View 
-        ref={r => Focus.focus(r)}
-        style=gameStyle
-        onKeyDown=((event: NodeEvents.keyEventParams) => {
-          //key event
-          let key = event.key |> Key.toString;
-          //press spacebar to start game
-          if(key == " ") {
-            dispatch(SetGameState(PreRunning)) 
-          }
-        })
-        >
+        <KeyboardInput
+            onKeyDown=((event: NodeEvents.keyEventParams) => {
+             print_endline ("KEY PRESS! ");
+              //key event
+              let key = event.key |> Key.toString;
+              //press spacebar to start game
+              if(key == " ") {
+                dispatch(SetGameState(PreRunning)) 
+              }
+        })>
+        <game>
           //<Image src="kirby1.png" width=50 height=50 />
           <Image src="start.png" width=600 height=450 />
-        </View>
+        </game>
+        </KeyboardInput>
       )
       | PreRunning => {
+print_endline ("Pre-running");
         let tickFn = t => dispatch(Count(t |> Time.toSeconds));
         let interval = 
         Revery_Core.Tick.interval(tickFn, Time.Seconds(1.)); 
@@ -79,18 +80,16 @@ let createElement = (~children as _, ()) =>
           //set game state Running
           dispatch(SetGameState(Running));
         };
-        <View style=gameStyle>
+        <game>
           <Image
             src="frame1.png"
             width=600
             height=450
           />
-        </View>
+        </game>
       }
       | Running => (
-        <View 
-          style=gameStyle
-          ref={r => Focus.focus(r)}
+        <KeyboardInput
           onKeyDown=((event: NodeEvents.keyEventParams) => {
             //key event
             let key = event.key |> Key.toString;
@@ -105,8 +104,8 @@ let createElement = (~children as _, ()) =>
             if(key == " ") {
                 dispatch(ResetState(initialState));
             }
-          })
-        >
+          })>
+        <game>
           (
             if(state.keyEvents |> List.length > 0) {
                switch(List.nth(state.keyEvents, 0)) {
@@ -118,7 +117,8 @@ let createElement = (~children as _, ()) =>
               <Image src="frame2.png" width=600 height=450 />
             }
           )
-        </View>
+        </game>
+        </KeyboardInput>
       )
      }
     )

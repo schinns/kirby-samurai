@@ -1,5 +1,6 @@
 open Revery;
 open Revery.UI;
+open Revery.UI.Components;
 
 let appStyle =
   Style.[
@@ -13,13 +14,13 @@ let appStyle =
     backgroundColor(Colors.black)
   ];
 
-let gameStyle = 
-  Style.[
-    justifyContent(`Center),
-    alignItems(`Center),
-    width(600),
-    height(450),
-  ];
+let game = (~children, ()) => {
+    <Center>
+        <Container width=600 height=450>
+            ...children
+        </Container>
+    </Center>
+};
 
 let textStyle = 
   Style.[

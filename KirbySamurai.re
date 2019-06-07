@@ -64,6 +64,7 @@ let createElement = (~children as _, ()) =>
           }
         })
         >
+          //<Image src="kirby1.png" width=50 height=50 />
           <Image src="start.png" width=600 height=450 />
         </View>
       )
@@ -93,14 +94,16 @@ let createElement = (~children as _, ()) =>
           onKeyDown=((event: NodeEvents.keyEventParams) => {
             //key event
             let key = event.key |> Key.toString;
-            // new key event state
-            let newKeyEvents = List.append(state.keyEvents, [key]);
-            //dispatch only up to 2 events
-            if(state.keyEvents |> List.length < 2) {
-              dispatch(SetKeyEvents(newKeyEvents))
+            if(key == "a" || key == "'") {
+              // new key event state
+              let newKeyEvents = List.append(state.keyEvents, [key]);
+              //dispatch only up to 2 events
+              if(state.keyEvents |> List.length < 2) {
+                dispatch(SetKeyEvents(newKeyEvents))
+              }
             }
             if(key == " ") {
-              dispatch(ResetState(initialState));
+                dispatch(ResetState(initialState));
             }
           })
         >

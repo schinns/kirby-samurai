@@ -1,6 +1,16 @@
 (install
     (section bin)
     (package App)
-    (files Roboto-Regular.ttf))
+    (files 
+      Roboto-Regular.ttf 
+      background.png 
+      logo.png
+      start.png
+      frame1.png
+      frame2.png
+      frame3a.png
+      frame3b.png
+    )
+)
     
 

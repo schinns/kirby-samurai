@@ -6,8 +6,8 @@ open Styles;
 
 type gameStateT = 
   | Stop
-  | PreRunning
-  | Running;
+  | PreDuel 
+  | Duel;
 
 type state = {
   threshold: float,
@@ -60,7 +60,7 @@ let createElement = (~children as _, ()) =>
           let key = event.key |> Key.toString;
           //press spacebar to start game
           if(key == " ") {
-            dispatch(SetGameState(PreRunning)) 
+            dispatch(SetGameState(PreDuel)) 
           }
         })
         >
@@ -68,7 +68,7 @@ let createElement = (~children as _, ()) =>
           <Image src="start.png" width=600 height=450 />
         </View>
       )
-      | PreRunning => {
+      | PreDuel => {
         let tickFn = t => dispatch(Count(t |> Time.toSeconds));
         let interval = 
         Revery_Core.Tick.interval(tickFn, Time.Seconds(1.)); 
@@ -77,7 +77,7 @@ let createElement = (~children as _, ()) =>
           //clear interval fn
           interval();
           //set game state Running
-          dispatch(SetGameState(Running));
+          dispatch(SetGameState(Duel));
         };
         <View style=gameStyle>
           <Image
@@ -87,7 +87,7 @@ let createElement = (~children as _, ()) =>
           />
         </View>
       }
-      | Running => (
+      | Duel => (
         <View 
           style=gameStyle
           ref={r => Focus.focus(r)}

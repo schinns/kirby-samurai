@@ -6,7 +6,7 @@ let init = app => {
   let window = App.createWindow(app, "Kirby Samurai");
   let element = 
     <View style=appStyle>
-      <KirbySamurai />      
+      <KirbySamurai />
     </View>;
 
   let _ = UI.start(window, element);
